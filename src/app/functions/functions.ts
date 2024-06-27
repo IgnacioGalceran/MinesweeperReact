@@ -1,17 +1,20 @@
 export function GetRandomBombs(
   cols: number,
   rows: number,
-  bombs: number
+  bombs: number,
+  initialPosition: number
 ): {
   setPositionsBombs: Set<number>;
   adyacenceMatrix: Map<number, number[]>;
   bombNumber: number[][];
 } {
   let positionsBombs: number[] = [];
+
   for (let i = 0; i < bombs; i++) {
     let finding: boolean = true;
+
     while (finding) {
-      let random = RandomNumber(cols, rows);
+      let random = RandomNumber(cols, rows, initialPosition);
       const exists = positionsBombs?.find((pos: number) => {
         return pos === random;
       });
@@ -34,8 +37,16 @@ export function GetRandomBombs(
   return { setPositionsBombs, adyacenceMatrix, bombNumber };
 }
 
-const RandomNumber = (cols: number, rows: number): number => {
-  return Math.floor(Math.random() * (cols * rows) + 1);
+const RandomNumber = (
+  cols: number,
+  rows: number,
+  initialPosition: number
+): number => {
+  let randomValue = Math.floor(Math.random() * (cols * rows) + 1);
+  do {
+    randomValue = Math.floor(Math.random() * (cols * rows) + 1);
+  } while (randomValue === initialPosition);
+  return randomValue;
 };
 
 const GenerateAdyacentMatrix = (

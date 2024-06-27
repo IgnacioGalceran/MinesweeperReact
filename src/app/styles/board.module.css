@@ -12,20 +12,63 @@
   justify-content: center;
 }
 
-.cube {
+.cube0,
+.cube1,
+.cube2,
+.cube3,
+.cube4,
+.cube5,
+.cube6,
+.cube7,
+.cube8 {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid rgb(85, 85, 85);
-  width: 60px;
-  height: 60px;
+  background-color: rgb(238, 235, 235);
+  border: 1px solid rgb(196, 196, 196);
+  font-size: 1.5rem;
+  font-weight: 600;
+  width: 30px;
+  height: 30px;
   cursor: pointer;
 }
 
-.cube:hover {
-  background-color: rgb(70, 147, 192);
+.cube1 {
+  color: rgb(17, 168, 255);
+}
+
+.cube2 {
+  color: rgb(53, 226, 76);
+}
+
+.cube3 {
+  color: rgb(218, 63, 63);
+}
+
+.cube4 {
+  color: rgb(15, 68, 99);
+}
+
+.cube5,
+.cube6,
+.cube7,
+.cube8 {
+  color: rgb(47, 25, 68);
+}
+
+.cube0:hover,
+.cube1:hover,
+.cube2:hover,
+.cube3:hover,
+.cube4:hover,
+.cube5:hover,
+.cube6:hover,
+.cube7:hover,
+.cube8:hover {
+  background-color: rgb(122, 122, 122);
 }
 
 .bomb {
-  background-color: red;
+  background-color: rgb(238, 235, 235);
+  cursor: default;
 }
