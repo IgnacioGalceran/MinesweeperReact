@@ -1,0 +1,44 @@
+.modalContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 40;
+}
+
+.modalContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-color: rgba(201, 201, 201, 0.034);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  height: fit-content;
+  width: fit-content;
+}
+
+.shovel,
+.flag {
+  background-color: transparent;
+  border: 2px solid rgb(101, 250, 108);
+  margin: 0 2px;
+}
+
+.flag {
+  border: 2px solid rgb(228, 66, 66);
+}
+
+@media only screen and (min-width: 800px) {
+  .modalContent {
+    width: 100dvw;
+    height: 100dvh;
+    padding: 40px 0;
+  }
+}
