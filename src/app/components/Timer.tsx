@@ -73,7 +73,7 @@ const Timer = React.forwardRef(({ level, onStart, onStop }: any, ref) => {
     const centiseconds = Math.floor((time % 1000) / 10);
     const formattedCentiseconds =
       centiseconds < 10 ? `0${centiseconds}` : `${centiseconds}`;
-    return `${formattedSeconds}:${formattedCentiseconds}`;
+    return `${formattedSeconds},${formattedCentiseconds}`;
   };
 
   useImperativeHandle(ref, () => ({
@@ -86,7 +86,7 @@ const Timer = React.forwardRef(({ level, onStart, onStop }: any, ref) => {
     <div className={styles.timerContainer}>
       <h1>Tiempo: {formatTime(currentTime)}</h1>
       <p>
-        Récord - Nivel {level}: {formatTime(maxTime * 1000)} segundos.
+        Récord - Nivel {level}. {formatTime(maxTime * 1000)} segundos.
       </p>
     </div>
   );

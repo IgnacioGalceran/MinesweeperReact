@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Board from "./components/Board";
 import styles from "./page.module.css";
 import { FACIL, MEDIO, DIFICIL, DIFICIL_MOBILE } from "./constants/const";
+import Footer from "./components/Footer";
 
 export default function Home() {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -48,8 +49,8 @@ export default function Home() {
     <main className={styles.main}>
       <div className={styles.text}>
         {!isGameOver && !wonGame && <h1>Juego del buscaminas</h1>}
-        {isGameOver && !wonGame && <h1>Perdiste :c</h1>}
-        {wonGame && isGameOver && <h1>Ganaste!!</h1>}
+        {isGameOver && !wonGame && <h1>Perdiste! :c</h1>}
+        {wonGame && isGameOver && <h1>Ganaste! c:</h1>}
       </div>
       <p>Nivel de juego</p>
       <select className={styles.select} onChange={(e) => SettingLevel(e)}>
@@ -77,6 +78,7 @@ export default function Home() {
           level: levelName,
         }}
       />
+      <Footer />
     </main>
   );
 }

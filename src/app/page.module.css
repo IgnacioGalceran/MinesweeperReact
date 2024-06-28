@@ -16,16 +16,17 @@
 
 .button,
 .select {
-  padding: 8px 26px;
+  padding: 8px 20px;
   margin: 10px 0;
   border-radius: 5px;
   border: 2px solid rgb(111, 154, 187);
   box-shadow: 4px 4px 10px rgba(43, 51, 59, 0.281);
+  text-align: center;
   background-color: transparent;
 }
 
 .button {
-  padding: 10px 30px;
+  padding: 10px 32px;
 }
 
 @media (min-width: 800px) {
