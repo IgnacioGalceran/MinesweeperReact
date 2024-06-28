@@ -7,13 +7,13 @@ export const FACIL: Levels = {
 };
 
 export const MEDIO: Levels = {
-  cols: 18,
-  rows: 14,
+  cols: 16,
+  rows: 16,
   bombs: 40,
 };
 
 export const DIFICIL: Levels = {
-  cols: 24,
-  rows: 20,
+  cols: 16,
+  rows: 28,
   bombs: 99,
 };
