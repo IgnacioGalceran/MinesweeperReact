@@ -4,7 +4,21 @@
   --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
     "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
     "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
-
+  --background-color: linear-gradient(
+    to right top,
+    #c7c7c7,
+    #cfcfcf,
+    #d7d7d7,
+    #dfdfdf,
+    #e7e7e7,
+    #ebebec,
+    #eeeef0,
+    #f2f2f5,
+    #f2f2f7,
+    #f1f2fa,
+    #f0f3fc,
+    #eef3ff
+  );
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
@@ -23,6 +37,7 @@ body {
 }
 
 body {
+  background: var(--background-color);
   color: rgb(var(--foreground-rgb));
 }
 

@@ -6,6 +6,8 @@ import { FACIL, MEDIO, DIFICIL } from "./constants/const";
 
 export default function Home() {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [isGameOver, setIsGameOver] = useState<boolean>(false);
+  const [wonGame, setWonGame] = useState<boolean>(false);
   const [level, setLevel] = useState(FACIL);
 
   const SettingLevel = (e: any) => {
@@ -30,13 +32,37 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      <button onClick={() => setIsPlaying(false)}>Reiniciar</button>
-      <select onChange={(e) => SettingLevel(e)}>
-        <option value="Facil">Facil</option>
-        <option value="Medio">Medio</option>
-        <option value="Dificil">Dificil</option>
+      <div className={styles.text}>
+        {!isGameOver && !wonGame && <h1>Juego del buscaminas</h1>}
+        {isGameOver && <h1>Perdiste :c</h1>}
+        {wonGame && <h1>Ganaste!!</h1>}
+      </div>
+      <p>Nivel de juego</p>
+      <select className={styles.select} onChange={(e) => SettingLevel(e)}>
+        <option className={styles.select} value="Facil">
+          Facil
+        </option>
+        <option className={styles.select} value="Medio">
+          Medio
+        </option>
+        <option className={styles.select} value="Dificil">
+          Dificil
+        </option>
       </select>
-      <Board props={level} state={{ setIsPlaying, isPlaying }} />
+      <button className={styles.button} onClick={() => setIsPlaying(false)}>
+        Reiniciar
+      </button>
+      <Board
+        props={level}
+        state={{
+          setIsPlaying,
+          isPlaying,
+          setIsGameOver,
+          isGameOver,
+          wonGame,
+          setWonGame,
+        }}
+      />
     </main>
   );
 }

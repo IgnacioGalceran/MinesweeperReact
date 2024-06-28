@@ -2,9 +2,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 80vw;
-  height: 80vh;
+  margin-top: 30px;
+  border: 1px solid rgb(33, 47, 58);
+  box-shadow: 4px 4px 10px rgba(43, 51, 59, 0.774);
 }
 
 .rows {
@@ -12,6 +12,7 @@
   justify-content: center;
 }
 
+.cube,
 .cube0,
 .cube1,
 .cube2,
@@ -20,33 +21,40 @@
 .cube5,
 .cube6,
 .cube7,
-.cube8 {
+.cube8,
+.discovered {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(238, 235, 235);
-  border: 1px solid rgb(196, 196, 196);
-  font-size: 1.5rem;
-  font-weight: 600;
-  width: 30px;
-  height: 30px;
+  background-color: rgb(218, 218, 218);
+  border: 1px solid rgb(156, 156, 156);
+  font-size: 1rem;
+  font-weight: 700;
+  width: 20px;
+  height: 20px;
   cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.discovered {
+  background-color: rgb(54, 60, 65);
 }
 
 .cube1 {
-  color: rgb(17, 168, 255);
+  color: rgb(57, 182, 255);
 }
 
 .cube2 {
-  color: rgb(53, 226, 76);
+  color: rgb(51, 243, 76);
 }
 
 .cube3 {
-  color: rgb(218, 63, 63);
+  color: rgb(255, 73, 73);
 }
 
 .cube4 {
-  color: rgb(15, 68, 99);
+  color: rgb(66, 111, 138);
 }
 
 .cube5,
@@ -68,7 +76,37 @@
   background-color: rgb(122, 122, 122);
 }
 
+.marked {
+  background-image: url("../../../public/flag.png");
+  background-size: contain;
+  background-position: center;
+}
+
 .bomb {
-  background-color: rgb(238, 235, 235);
+  background-image: url("../../../public/bomb.png");
+  background-size: cover;
+  background-position: center;
   cursor: default;
+}
+
+.pressed {
+  background-color: blueviolet;
+}
+
+@media only screen and (min-width: 800px) {
+  .cube,
+  .cube0,
+  .cube1,
+  .cube2,
+  .cube3,
+  .cube4,
+  .cube5,
+  .cube6,
+  .cube7,
+  .cube8,
+  .discovered {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+  }
 }
