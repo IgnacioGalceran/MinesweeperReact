@@ -8,5 +8,6 @@ export type BoardProps = {
     isPlaying: boolean;
     isGameOver: boolean;
     setWonGame: any;
+    level: string;
   };
 };

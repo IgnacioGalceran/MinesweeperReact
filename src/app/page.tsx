@@ -9,6 +9,7 @@ export default function Home() {
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [wonGame, setWonGame] = useState<boolean>(false);
   const [level, setLevel] = useState(FACIL);
+  const [levelName, setLevelName] = useState("facil");
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -22,9 +23,11 @@ export default function Home() {
     switch (value) {
       case "Facil":
         setLevel(FACIL);
+        setLevelName("facil");
         break;
       case "Medio":
         setLevel(MEDIO);
+        setLevelName("medio");
         break;
       case "Dificil":
         if (isMobile) {
@@ -32,6 +35,7 @@ export default function Home() {
         } else {
           setLevel(DIFICIL);
         }
+        setLevelName("dificil");
         break;
       default:
         break;
@@ -70,6 +74,7 @@ export default function Home() {
           setIsGameOver,
           isGameOver,
           setWonGame,
+          level: levelName,
         }}
       />
     </main>

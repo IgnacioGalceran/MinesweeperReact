@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { GetRandomBombs, bfs } from "../functions/functions";
 import { BoardProps } from "../types/BoardProps";
 import Loader from "./Loader";
@@ -7,10 +7,17 @@ import Image from "next/image";
 
 import styles from "@/app/styles/board.module.css";
 import stylesModal from "@/app/styles/modal.module.css";
+import Timer from "./Timer";
 
 export default function Board({ props, state }: BoardProps) {
-  const { isPlaying, setIsPlaying, setIsGameOver, setWonGame, isGameOver } =
-    state;
+  const {
+    isPlaying,
+    setIsPlaying,
+    setIsGameOver,
+    setWonGame,
+    isGameOver,
+    level,
+  } = state;
   const { cols, rows, bombs } = props;
   const [discovered, setDiscovered] = useState<Set<number>>(new Set());
   const [board, setBoard] = useState<JSX.Element[][]>([]);
@@ -108,6 +115,26 @@ export default function Board({ props, state }: BoardProps) {
     }
   }, [cols, rows, isPlaying]);
 
+  const timerRef: any = useRef(null);
+
+  const handleStartTimer = () => {
+    if (timerRef.current) {
+      timerRef.current.startTimer();
+    }
+  };
+
+  const handleStopTimer = () => {
+    if (timerRef.current) {
+      timerRef.current.stopTimer();
+    }
+  };
+
+  const handleResetTimer = () => {
+    if (timerRef.current) {
+      timerRef.current.resetTimer();
+    }
+  };
+
   const handleAddPosition = (initialPosition: number) => {
     setDiscovered(discovered.add(initialPosition));
     let element = document.getElementById(initialPosition.toString());
@@ -131,7 +158,7 @@ export default function Board({ props, state }: BoardProps) {
   };
 
   const clearStates = () => {
-    console.log("clear");
+    handleResetTimer();
     setDiscovered(new Set());
     setPositionBombs(new Set());
     setAdyacenceMatrix(new Map());
@@ -151,6 +178,7 @@ export default function Board({ props, state }: BoardProps) {
               let initialPosition = i * cols + (j + 1);
               GetRandom(cols, rows, bombs, initialPosition);
               setIsPlaying(true);
+              handleStartTimer();
             }}
             className={styles["cube"]}
           >
@@ -189,6 +217,7 @@ export default function Board({ props, state }: BoardProps) {
 
     if (positionsBombs.has(clickPosition)) {
       setIsGameOver(true);
+      handleResetTimer();
       showBombs();
       return;
     }
@@ -206,6 +235,7 @@ export default function Board({ props, state }: BoardProps) {
     if (discovered.size + positionsBombs.size === cols * rows) {
       setWonGame(true);
       setIsGameOver(true);
+      handleStopTimer();
     }
   };
 
@@ -232,11 +262,18 @@ export default function Board({ props, state }: BoardProps) {
     if (discovered.size + positionsBombs.size === cols * rows) {
       setWonGame(true);
       setIsGameOver(true);
+      handleStopTimer();
     }
   };
 
   return (
     <>
+      <Timer
+        ref={timerRef}
+        level={level}
+        onStart={() => console.log("Timer started")}
+        onStop={() => console.log("Timer stopped")}
+      />
       <section
         className={`${styles.board} ${isGameOver ? styles.disabled : ""}`}
       >
