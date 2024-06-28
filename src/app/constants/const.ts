@@ -13,6 +13,12 @@ export const MEDIO: Levels = {
 };
 
 export const DIFICIL: Levels = {
+  cols: 22,
+  rows: 22,
+  bombs: 99,
+};
+
+export const DIFICIL_MOBILE: Levels = {
   cols: 16,
   rows: 28,
   bombs: 99,

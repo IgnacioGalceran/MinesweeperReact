@@ -1,14 +1,20 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Board from "./components/Board";
 import styles from "./page.module.css";
-import { FACIL, MEDIO, DIFICIL } from "./constants/const";
+import { FACIL, MEDIO, DIFICIL, DIFICIL_MOBILE } from "./constants/const";
 
 export default function Home() {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [wonGame, setWonGame] = useState<boolean>(false);
   const [level, setLevel] = useState(FACIL);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mobileDevice = /Mobi|Android/i.test(navigator.userAgent);
+    setIsMobile(mobileDevice);
+  }, []);
 
   const SettingLevel = (e: any) => {
     const { value } = e.target;
@@ -21,7 +27,11 @@ export default function Home() {
         setLevel(MEDIO);
         break;
       case "Dificil":
-        setLevel(DIFICIL);
+        if (isMobile) {
+          setLevel(DIFICIL_MOBILE);
+        } else {
+          setLevel(DIFICIL);
+        }
         break;
       default:
         break;
