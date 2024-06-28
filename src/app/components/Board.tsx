@@ -81,7 +81,7 @@ export default function Board({ props, state }: BoardProps) {
               id={key.toString()}
               key={key.toString()}
               onContextMenu={(e) => handleRightClick(key, e)}
-              onClick={() => handleClickCube(key)}
+              onClick={(e) => handleClickCube(key, e)}
               className={`${
                 discovered.has(key)
                   ? `${styles.discovered} ${
@@ -163,13 +163,15 @@ export default function Board({ props, state }: BoardProps) {
     setBoard(array);
   };
 
-  const handleClickCube = (position: number) => {
+  const handleClickCube = (position: number, e: any) => {
     if (discovered.has(position)) return;
 
     if (isMobile) {
+      const { clientX: x, clientY: y } = e;
       setOpenMobileMenu({
         state: true,
         position: position,
+        coordinates: { x, y },
       });
     } else {
       handleAddPosition(position);
