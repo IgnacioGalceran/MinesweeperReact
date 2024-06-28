@@ -39,6 +39,63 @@ export default function Board({ props, state }: BoardProps) {
     return { setPositionsBombs, adyacenceMatrix, bombNumber };
   };
 
+  useEffect(() => {
+    if (initialPosition && adyacenceMatrix) {
+      let element = document.getElementById(initialPosition.toString());
+      if (element) {
+        const adyacentes = adyacenceMatrix.get(initialPosition);
+        if (adyacentes !== undefined && adyacentes.length) {
+          element.innerHTML = adyacentes.length.toString();
+          handleAddPosition(initialPosition);
+          const className = `cube${adyacentes.length.toString()}`;
+          if (styles[className]) {
+            element.classList.add(styles[className]);
+          }
+        } else {
+          discoverNeighborhood(initialPosition);
+        }
+      }
+    }
+  }, [initialPosition]);
+
+  useEffect(() => {
+    const drawBoard = (): JSX.Element[][] => {
+      let array: JSX.Element[][] = Array.from({ length: rows }, (_, i) =>
+        Array.from({ length: cols }, (_, j) => {
+          const key = j + cols * i + 1;
+
+          return (
+            <div
+              id={key.toString()}
+              key={key.toString()}
+              onContextMenu={(e) => handleRightClick(key, e)}
+              onClick={() => handleClickCube(key)}
+              className={`${
+                discovered.has(key)
+                  ? `${styles.discovered} ${
+                      styles["cube" + bombNumber[i][j].toString()]
+                    }`
+                  : styles["cube" + bombNumber[i][j].toString()]
+              } ${bombNumber[i][j].toString()}`}
+            >
+              {discovered.has(key) &&
+                bombNumber[i][j] > 0 &&
+                bombNumber[i][j].toString()}
+            </div>
+          );
+        })
+      );
+
+      return array;
+    };
+
+    if (isPlaying) {
+      setBoard(drawBoard());
+    } else {
+      clearStates();
+    }
+  }, [cols, rows, isPlaying]);
+
   const handleAddPosition = (initialPosition: number) => {
     setDiscovered(discovered.add(initialPosition));
     let element = document.getElementById(initialPosition.toString());
@@ -140,64 +197,12 @@ export default function Board({ props, state }: BoardProps) {
         element.innerHTML = bombs.toString();
       }
     });
+
+    if (discovered.size + positionsBombs.size === cols * rows) {
+      setWonGame(true);
+      setIsGameOver(true);
+    }
   };
-
-  useEffect(() => {
-    if (initialPosition && adyacenceMatrix) {
-      let element = document.getElementById(initialPosition.toString());
-      if (element) {
-        const adyacentes = adyacenceMatrix.get(initialPosition);
-        if (adyacentes !== undefined && adyacentes.length) {
-          element.innerHTML = adyacentes.length.toString();
-          handleAddPosition(initialPosition);
-          const className = `cube${adyacentes.length.toString()}`;
-          if (styles[className]) {
-            element.classList.add(styles[className]);
-          }
-        } else {
-          discoverNeighborhood(initialPosition);
-        }
-      }
-    }
-  }, [initialPosition]);
-
-  useEffect(() => {
-    const drawBoard = (): JSX.Element[][] => {
-      let array: JSX.Element[][] = Array.from({ length: rows }, (_, i) =>
-        Array.from({ length: cols }, (_, j) => {
-          const key = j + cols * i + 1;
-
-          return (
-            <div
-              id={key.toString()}
-              key={key.toString()}
-              onContextMenu={(e) => handleRightClick(key, e)}
-              onClick={() => handleClickCube(key)}
-              className={`${
-                discovered.has(key)
-                  ? `${styles.discovered} ${
-                      styles["cube" + bombNumber[i][j].toString()]
-                    }`
-                  : styles["cube" + bombNumber[i][j].toString()]
-              } ${bombNumber[i][j].toString()}`}
-            >
-              {discovered.has(key) &&
-                bombNumber[i][j] > 0 &&
-                bombNumber[i][j].toString()}
-            </div>
-          );
-        })
-      );
-
-      return array;
-    };
-
-    if (isPlaying) {
-      setBoard(drawBoard());
-    } else {
-      clearStates();
-    }
-  }, [cols, rows, isPlaying]);
 
   return (
     <section className={`${styles.board} ${isGameOver ? styles.disabled : ""}`}>
