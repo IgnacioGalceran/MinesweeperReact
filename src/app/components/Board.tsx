@@ -119,6 +119,8 @@ export default function Board({ props, state }: BoardProps) {
   const handleRightClick = (position: number, e: any) => {
     e.preventDefault();
 
+    if (discovered.has(position)) return;
+
     let element = document.getElementById(position.toString());
     if (!element) return;
     if (!element.className.includes("marked")) {
@@ -162,6 +164,8 @@ export default function Board({ props, state }: BoardProps) {
   };
 
   const handleClickCube = (position: number) => {
+    if (discovered.has(position)) return;
+
     if (isMobile) {
       setOpenMobileMenu({
         state: true,
