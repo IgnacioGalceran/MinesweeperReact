@@ -34,8 +34,8 @@ export default function Home() {
     <main className={styles.main}>
       <div className={styles.text}>
         {!isGameOver && !wonGame && <h1>Juego del buscaminas</h1>}
-        {isGameOver && <h1>Perdiste :c</h1>}
-        {wonGame && <h1>Ganaste!!</h1>}
+        {isGameOver && !wonGame && <h1>Perdiste :c</h1>}
+        {wonGame && isGameOver && <h1>Ganaste!!</h1>}
       </div>
       <p>Nivel de juego</p>
       <select className={styles.select} onChange={(e) => SettingLevel(e)}>
@@ -59,7 +59,6 @@ export default function Home() {
           isPlaying,
           setIsGameOver,
           isGameOver,
-          wonGame,
           setWonGame,
         }}
       />

@@ -8,18 +8,11 @@ import styles from "@/app/styles/board.module.css";
 import Loader from "./Loader";
 
 export default function Board({ props, state }: BoardProps) {
-  const {
-    isPlaying,
-    setIsPlaying,
-    setIsGameOver,
-    isGameOver,
-    wonGame,
-    setWonGame,
-  } = state;
+  const { isPlaying, setIsPlaying, setIsGameOver, setWonGame, isGameOver } =
+    state;
   const { cols, rows, bombs } = props;
   const [discovered, setDiscovered] = useState<Set<number>>(new Set());
   const [board, setBoard] = useState<JSX.Element[][]>([]);
-
   const [bombNumber, setBombNumber] = useState<number[][]>([]);
   const [initialPosition, setInitialPosition] = useState<number | null>(null);
   const [adyacenceMatrix, setAdyacenceMatrix] = useState<Map<number, number[]>>(
@@ -66,6 +59,7 @@ export default function Board({ props, state }: BoardProps) {
   };
 
   const clearStates = () => {
+    console.log("clear");
     setDiscovered(new Set());
     setPositionBombs(new Set());
     setAdyacenceMatrix(new Map());
@@ -97,9 +91,12 @@ export default function Board({ props, state }: BoardProps) {
     setBoard(array);
   };
 
-  const updateBoard = (clickPosition: number) => {
-    if (isGameOver) return;
+  const handleClickCube = (position: number) => {
+    handleAddPosition(position);
+    updateBoard(position);
+  };
 
+  const updateBoard = (clickPosition: number): void => {
     let element = document.getElementById(clickPosition.toString());
 
     if (positionsBombs.has(clickPosition)) {
@@ -107,6 +104,7 @@ export default function Board({ props, state }: BoardProps) {
       showBombs();
       return;
     }
+
     if (element) {
       if (adyacenceMatrix.get(clickPosition)?.length) {
         element.innerHTML =
@@ -119,6 +117,7 @@ export default function Board({ props, state }: BoardProps) {
 
     if (discovered.size + positionsBombs.size === cols * rows) {
       setWonGame(true);
+      setIsGameOver(true);
     }
   };
 
@@ -200,13 +199,8 @@ export default function Board({ props, state }: BoardProps) {
     }
   }, [cols, rows, isPlaying]);
 
-  const handleClickCube = (position: number) => {
-    handleAddPosition(position);
-    updateBoard(position);
-  };
-
   return (
-    <section className={styles.board}>
+    <section className={`${styles.board} ${isGameOver ? styles.disabled : ""}`}>
       {board?.length ? (
         board?.map((row: any, index: number) => {
           return (

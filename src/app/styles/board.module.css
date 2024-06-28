@@ -41,6 +41,11 @@
   background-color: rgb(54, 60, 65);
 }
 
+.disabled {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
 .cube1 {
   color: rgb(57, 182, 255);
 }

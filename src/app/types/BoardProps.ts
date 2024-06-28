@@ -7,7 +7,6 @@ export type BoardProps = {
     setIsGameOver: any;
     isPlaying: boolean;
     isGameOver: boolean;
-    wonGame: boolean;
     setWonGame: any;
   };
 };
