@@ -52,21 +52,28 @@ export default function Home() {
         {isGameOver && !wonGame && <h1>Perdiste! :c</h1>}
         {wonGame && isGameOver && <h1>Ganaste! c:</h1>}
       </div>
-      <p>Nivel de juego</p>
-      <select className={styles.select} onChange={(e) => SettingLevel(e)}>
-        <option className={styles.select} value="Facil">
-          Facil
-        </option>
-        <option className={styles.select} value="Medio">
-          Medio
-        </option>
-        <option className={styles.select} value="Dificil">
-          Dificil
-        </option>
-      </select>
-      <button className={styles.button} onClick={() => setIsPlaying(false)}>
-        Reiniciar
-      </button>
+      <div className={styles.menu}>
+        <div>
+          <p>Nivel de juego</p>
+          <select className={styles.select} onChange={(e) => SettingLevel(e)}>
+            <option className={styles.select} value="Facil">
+              Facil
+            </option>
+            <option className={styles.select} value="Medio">
+              Medio
+            </option>
+            <option className={styles.select} value="Dificil">
+              Dificil
+            </option>
+          </select>
+        </div>
+        <div>
+          <p>Reiniciar el juego</p>
+          <button className={styles.button} onClick={() => setIsPlaying(false)}>
+            Reiniciar
+          </button>
+        </div>
+      </div>
       <Board
         props={level}
         state={{
