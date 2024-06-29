@@ -14,7 +14,7 @@ const Timer = React.forwardRef(({ level }: any, ref) => {
 
   useEffect(() => {
     const savedTime = localStorage.getItem(maxTimeKey);
-    console.log(savedTime);
+
     if (savedTime) {
       setMaxTime(parseFloat(savedTime));
     } else {
@@ -49,9 +49,8 @@ const Timer = React.forwardRef(({ level }: any, ref) => {
 
   const saveMaxTime = () => {
     const savedTime = localStorage.getItem(maxTimeKey);
-    console.log(savedTime);
     const currentSeconds = currentTime / 1000;
-    console.log(currentSeconds);
+
     if (!savedTime || currentSeconds < parseFloat(savedTime)) {
       localStorage.setItem(maxTimeKey, currentSeconds.toString());
       setMaxTime(currentSeconds);

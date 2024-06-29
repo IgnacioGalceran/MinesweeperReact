@@ -23,6 +23,7 @@ export default function Board({ props, state }: BoardProps) {
   const [flagged, setFlagged] = useState<Set<number>>(new Set());
   const [board, setBoard] = useState<JSX.Element[][]>([]);
   const [isMobile, setIsMobile] = useState(false);
+  const [countFlagged, setCountFlagged] = useState<number>(0);
   const [openMobileMenu, setOpenMobileMenu] = useState<any>({
     state: false,
     position: null,
@@ -156,12 +157,13 @@ export default function Board({ props, state }: BoardProps) {
       setFlagged(flagged.add(position));
     } else {
       element.classList.remove(styles.marked);
-      setFlagged((prevFlagged) => {
-        const newFlagged = new Set(prevFlagged);
-        newFlagged.delete(position);
-        return newFlagged;
-      });
+      let flaggedsWithoutDeleted = flagged.delete(position);
+      if (flaggedsWithoutDeleted) {
+        setFlagged(flagged);
+      }
     }
+
+    setCountFlagged(flagged.size);
   };
 
   const clearStates = () => {
@@ -174,6 +176,7 @@ export default function Board({ props, state }: BoardProps) {
     setBombNumber([]);
     setIsGameOver(false);
     setInitialPosition(null);
+    setCountFlagged(0);
 
     let array = Array.from({ length: rows }, (_, i) =>
       Array.from({ length: cols }, (_, j) => {
@@ -212,23 +215,26 @@ export default function Board({ props, state }: BoardProps) {
       rows
     );
 
-    neighborhood.forEach((neigh: number) => {
-      handleAddPosition(neigh);
-      let bombs = adyacenceMatrix.get(neigh)?.length;
-      let element = document.getElementById(neigh.toString());
-      if (element && bombs && bombs >= 0) {
-        element.innerHTML = bombs.toString();
+    if (typeof neighborhood !== "boolean") {
+      neighborhood.forEach((neigh: number) => {
+        handleAddPosition(neigh);
+        let bombs = adyacenceMatrix.get(neigh)?.length;
+        let element = document.getElementById(neigh.toString());
+        if (element && bombs && bombs >= 0) {
+          element.innerHTML = bombs.toString();
+        }
+      });
+    } else {
+      if (neighborhood) {
+        losedGame();
       }
-    });
-
-    if (discovered.size + positionsBombs.size === cols * rows) {
-      setWonGame(true);
-      setIsGameOver(true);
-      handleStopTimer();
     }
+
+    finishedAndWonGame();
   };
 
   const handleClickCube = (position: number, e: any) => {
+    console.log(discovered);
     if (discovered.has(position)) {
       discoverNeighborhoodWithPosition(position);
       return;
@@ -263,21 +269,20 @@ export default function Board({ props, state }: BoardProps) {
       }
     });
 
-    if (discovered.size + positionsBombs.size === cols * rows) {
-      setWonGame(true);
-      setIsGameOver(true);
-      handleStopTimer();
-    }
+    finishedAndWonGame();
+  };
+
+  const losedGame = () => {
+    setIsGameOver(true);
+    handleResetTimer();
+    showBombs();
   };
 
   const updateBoard = (clickPosition: number): void => {
     let element = document.getElementById(clickPosition.toString());
 
     if (positionsBombs.has(clickPosition)) {
-      setIsGameOver(true);
-      handleResetTimer();
-      showBombs();
-      return;
+      return losedGame();
     }
 
     if (element) {
@@ -290,9 +295,14 @@ export default function Board({ props, state }: BoardProps) {
       }
     }
 
+    finishedAndWonGame();
+  };
+
+  const finishedAndWonGame = () => {
     if (discovered.size + positionsBombs.size === cols * rows) {
       setWonGame(true);
       setIsGameOver(true);
+
       handleStopTimer();
     }
   };
@@ -310,7 +320,7 @@ export default function Board({ props, state }: BoardProps) {
     <>
       <Timer ref={timerRef} level={level} />
       <p className={styles.remaining}>
-        Bombas restantes: {bombNumber.length - flagged.size}
+        Bombas restantes: {positionsBombs.size - countFlagged}
       </p>
       <section
         className={`${styles.board} ${isGameOver ? styles.disabled : ""}`}

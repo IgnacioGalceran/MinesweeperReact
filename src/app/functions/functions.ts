@@ -220,11 +220,14 @@ export function bfsWithDiscovered(
   initialPosition: number,
   cols: number,
   rows: number
-): number[] {
+): number[] | boolean {
   // Verificar si el nodo tiene bombas adyacentes
   let newDiscovered: any[] = [];
+  let gameOver: boolean = false;
   const neighbors = adyacenceMatrix.get(initialPosition);
   let countFlagged = 0;
+
+  console.log(discovered);
 
   const i = Math.floor((initialPosition - 1) / cols);
   const j = (initialPosition - 1) % cols;
@@ -239,8 +242,13 @@ export function bfsWithDiscovered(
     ) {
       newDiscovered = bfs(adyacenceMatrix, neighborPos, cols, rows);
     }
+
     if (flagged.has(neighborPos)) {
       countFlagged++;
+    }
+
+    if (flagged.has(neighborPos) && !positionsBombs.has(neighborPos)) {
+      gameOver = true;
     }
   }
   // Arriba izquierda
@@ -253,8 +261,13 @@ export function bfsWithDiscovered(
     ) {
       newDiscovered = bfs(adyacenceMatrix, neighborPos, cols, rows);
     }
+
     if (flagged.has(neighborPos)) {
       countFlagged++;
+    }
+
+    if (flagged.has(neighborPos) && !positionsBombs.has(neighborPos)) {
+      gameOver = true;
     }
   }
   // Arriba derecha
@@ -267,8 +280,13 @@ export function bfsWithDiscovered(
     ) {
       newDiscovered = bfs(adyacenceMatrix, neighborPos, cols, rows);
     }
+
     if (flagged.has(neighborPos)) {
       countFlagged++;
+    }
+
+    if (flagged.has(neighborPos) && !positionsBombs.has(neighborPos)) {
+      gameOver = true;
     }
   }
   // Abajo
@@ -281,8 +299,13 @@ export function bfsWithDiscovered(
     ) {
       newDiscovered = bfs(adyacenceMatrix, neighborPos, cols, rows);
     }
+
     if (flagged.has(neighborPos)) {
       countFlagged++;
+    }
+
+    if (flagged.has(neighborPos) && !positionsBombs.has(neighborPos)) {
+      gameOver = true;
     }
   }
   // Abajo izquierda
@@ -295,8 +318,13 @@ export function bfsWithDiscovered(
     ) {
       newDiscovered = bfs(adyacenceMatrix, neighborPos, cols, rows);
     }
+
     if (flagged.has(neighborPos)) {
       countFlagged++;
+    }
+
+    if (flagged.has(neighborPos) && !positionsBombs.has(neighborPos)) {
+      gameOver = true;
     }
   }
   // Abajo derecha
@@ -309,8 +337,13 @@ export function bfsWithDiscovered(
     ) {
       newDiscovered = bfs(adyacenceMatrix, neighborPos, cols, rows);
     }
+
     if (flagged.has(neighborPos)) {
       countFlagged++;
+    }
+
+    if (flagged.has(neighborPos) && !positionsBombs.has(neighborPos)) {
+      gameOver = true;
     }
   }
   // Izquierda
@@ -323,8 +356,13 @@ export function bfsWithDiscovered(
     ) {
       newDiscovered = bfs(adyacenceMatrix, neighborPos, cols, rows);
     }
+
     if (flagged.has(neighborPos)) {
       countFlagged++;
+    }
+
+    if (flagged.has(neighborPos) && !positionsBombs.has(neighborPos)) {
+      gameOver = true;
     }
   }
   // Derecha
@@ -337,9 +375,20 @@ export function bfsWithDiscovered(
     ) {
       newDiscovered = bfs(adyacenceMatrix, neighborPos, cols, rows);
     }
+
     if (flagged.has(neighborPos)) {
       countFlagged++;
     }
+
+    if (flagged.has(neighborPos) && !positionsBombs.has(neighborPos)) {
+      gameOver = true;
+    }
+  }
+
+  console.log(gameOver);
+
+  if (gameOver) {
+    return gameOver;
   }
 
   if (neighbors?.length !== countFlagged) return [];

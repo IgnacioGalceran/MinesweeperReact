@@ -49,8 +49,8 @@ export default function Home() {
     <main className={styles.main}>
       <div className={styles.text}>
         {!isGameOver && !wonGame && <h1>Juego del buscaminas</h1>}
-        {isGameOver && !wonGame && <h1>Perdiste! :c</h1>}
-        {wonGame && isGameOver && <h1>Ganaste! c:</h1>}
+        {isGameOver && !wonGame && <h1>Perdiste! 😭</h1>}
+        {wonGame && isGameOver && <h1>Ganaste! 😎</h1>}
       </div>
       <div className={styles.menu}>
         <div>
