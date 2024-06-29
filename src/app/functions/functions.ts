@@ -227,8 +227,6 @@ export function bfsWithDiscovered(
   const neighbors = adyacenceMatrix.get(initialPosition);
   let countFlagged = 0;
 
-  console.log(discovered);
-
   const i = Math.floor((initialPosition - 1) / cols);
   const j = (initialPosition - 1) % cols;
 
@@ -384,8 +382,6 @@ export function bfsWithDiscovered(
       gameOver = true;
     }
   }
-
-  console.log(gameOver);
 
   if (gameOver) {
     return gameOver;

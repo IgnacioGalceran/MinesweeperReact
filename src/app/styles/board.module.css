@@ -4,7 +4,7 @@
   align-items: center;
   margin-top: 30px;
   border: 1px solid rgb(111 111 111);
-  box-shadow: 4px 4px 10px rgba(43, 51, 59, 0.774);
+  box-shadow: 4px 4px 10px rgba(153, 153, 153, 0.774);
 }
 
 .rows {
@@ -25,8 +25,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(218, 218, 218);
-  border: 1px solid rgb(156, 156, 156);
+  background-color: rgba(216, 216, 216, 0.3);
+  border: 1px solid rgb(134, 134, 134);
+  box-shadow: 4px 4px 10px rgba(57, 57, 57, 0.514);
   font-size: 1rem;
   font-weight: 700;
   width: 20px;
@@ -35,7 +36,8 @@
 }
 
 .discovered {
-  background-color: rgb(54, 60, 65);
+  background-color: rgba(163, 163, 163, 0.692);
+  box-shadow: none;
 }
 
 .disabled {
@@ -44,11 +46,11 @@
 }
 
 .cube1 {
-  color: rgb(57, 182, 255);
+  color: rgb(0, 126, 199);
 }
 
 .cube2 {
-  color: rgb(51, 243, 76);
+  color: rgb(0, 153, 20);
 }
 
 .cube3 {
@@ -75,7 +77,7 @@
 .cube6:hover,
 .cube7:hover,
 .cube8:hover {
-  background-color: rgb(122, 122, 122);
+  background-color: rgb(177, 177, 177);
 }
 
 .remaining {
@@ -90,7 +92,8 @@
 
 .bomb {
   background-image: url("../../../public/bomb.png");
-  background-size: cover;
+  background-size: 20px;
+  background-repeat: no-repeat;
   background-position: center;
   cursor: default;
 }
