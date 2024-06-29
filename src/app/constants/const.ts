@@ -9,7 +9,7 @@ export const FACIL: Levels = {
 export const MEDIO: Levels = {
   cols: 16,
   rows: 16,
-  bombs: 30,
+  bombs: 40,
 };
 
 export const DIFICIL: Levels = {
