@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { GetRandomBombs, bfs } from "../functions/functions";
+import { GetRandomBombs, bfs, bfsWithDiscovered } from "../functions/functions";
 import { BoardProps } from "../types/BoardProps";
 import Loader from "./Loader";
 import Image from "next/image";
@@ -20,6 +20,7 @@ export default function Board({ props, state }: BoardProps) {
   } = state;
   const { cols, rows, bombs } = props;
   const [discovered, setDiscovered] = useState<Set<number>>(new Set());
+  const [flagged, setFlagged] = useState<Set<number>>(new Set());
   const [board, setBoard] = useState<JSX.Element[][]>([]);
   const [isMobile, setIsMobile] = useState(false);
   const [openMobileMenu, setOpenMobileMenu] = useState<any>({
@@ -152,14 +153,21 @@ export default function Board({ props, state }: BoardProps) {
     if (!element) return;
     if (!element.className.includes("marked")) {
       element.classList.add(`${styles.marked}`);
+      setFlagged(flagged.add(position));
     } else {
       element.classList.remove(styles.marked);
+      setFlagged((prevFlagged) => {
+        const newFlagged = new Set(prevFlagged);
+        newFlagged.delete(position);
+        return newFlagged;
+      });
     }
   };
 
   const clearStates = () => {
     handleResetTimer();
     setDiscovered(new Set());
+    setFlagged(new Set());
     setPositionBombs(new Set());
     setAdyacenceMatrix(new Map());
     setWonGame(false);
@@ -192,9 +200,35 @@ export default function Board({ props, state }: BoardProps) {
   };
 
   const discoverNeighborhoodWithPosition = (position: number) => {
-    console.log(position);
-    console.log();
+    if (flagged.has(position)) return;
+
+    const neighborhood = bfsWithDiscovered(
+      adyacenceMatrix,
+      positionsBombs,
+      discovered,
+      flagged,
+      position,
+      cols,
+      rows
+    );
+
+    neighborhood.forEach((neigh: number) => {
+      handleAddPosition(neigh);
+      let bombs = adyacenceMatrix.get(neigh)?.length;
+      let element = document.getElementById(neigh.toString());
+      if (element && bombs && bombs >= 0) {
+        element.innerHTML = bombs.toString();
+      }
+    });
+
+    if (discovered.size + positionsBombs.size === cols * rows) {
+      setWonGame(true);
+      setIsGameOver(true);
+      handleStopTimer();
+    }
   };
+
+  console.log(discovered.size + positionsBombs.size === cols * rows);
 
   const handleClickCube = (position: number, e: any) => {
     if (discovered.has(position)) {
@@ -221,9 +255,7 @@ export default function Board({ props, state }: BoardProps) {
   };
 
   const discoverNeighborhood = (position: number) => {
-    console.log(position);
     const neighborhood = bfs(adyacenceMatrix, position, cols, rows);
-    console.log(neighborhood);
     neighborhood.forEach((neigh: number) => {
       handleAddPosition(neigh);
       let bombs = adyacenceMatrix.get(neigh)?.length;
@@ -279,6 +311,9 @@ export default function Board({ props, state }: BoardProps) {
   return (
     <>
       <Timer ref={timerRef} level={level} />
+      <p className={styles.remaining}>
+        Bombas restantes: {bombNumber.length - flagged.size}
+      </p>
       <section
         className={`${styles.board} ${isGameOver ? styles.disabled : ""}`}
       >

@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   margin-top: 30px;
-  border: 1px solid rgb(33, 47, 58);
+  border: 1px solid rgb(111 111 111);
   box-shadow: 4px 4px 10px rgba(43, 51, 59, 0.774);
 }
 
@@ -76,6 +76,10 @@
 .cube7:hover,
 .cube8:hover {
   background-color: rgb(122, 122, 122);
+}
+
+.remaining {
+  margin-top: 15px;
 }
 
 .marked {

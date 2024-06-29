@@ -1,15 +1,15 @@
 import { Levels } from "../types/Levels";
 
 export const FACIL: Levels = {
-  cols: 10,
-  rows: 10,
-  bombs: 10,
+  cols: 5,
+  rows: 5,
+  bombs: 3,
 };
 
 export const MEDIO: Levels = {
   cols: 16,
   rows: 16,
-  bombs: 40,
+  bombs: 30,
 };
 
 export const DIFICIL: Levels = {
