@@ -228,8 +228,6 @@ export default function Board({ props, state }: BoardProps) {
     }
   };
 
-  console.log(discovered.size + positionsBombs.size === cols * rows);
-
   const handleClickCube = (position: number, e: any) => {
     if (discovered.has(position)) {
       discoverNeighborhoodWithPosition(position);
