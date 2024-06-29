@@ -3,18 +3,14 @@ import Image from "next/image";
 import React, { useState, useEffect, useRef, useImperativeHandle } from "react";
 import styles from "@/app/styles/timer.module.css";
 
-const Timer = React.forwardRef(({ level, onStart, onStop }: any, ref) => {
+const Timer = React.forwardRef(({ level }: any, ref) => {
   const [startTime, setStartTime] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [maxTime, setMaxTime] = useState<number>(0);
   const [isRunning, setIsRunning] = useState(false);
 
-  console.log(level);
-
   const timerRef: any = useRef(null);
   const maxTimeKey = `maxTime_${level}`;
-
-  console.log(maxTimeKey);
 
   useEffect(() => {
     const savedTime = localStorage.getItem(maxTimeKey);
@@ -44,19 +40,19 @@ const Timer = React.forwardRef(({ level, onStart, onStop }: any, ref) => {
   const startTimer = () => {
     setStartTime(Date.now());
     setIsRunning(true);
-    onStart();
   };
 
   const stopTimer = () => {
     setIsRunning(false);
     saveMaxTime();
-    onStop();
   };
 
   const saveMaxTime = () => {
     const savedTime = localStorage.getItem(maxTimeKey);
+    console.log(savedTime);
     const currentSeconds = currentTime / 1000;
-    if (!savedTime || currentSeconds > parseFloat(savedTime)) {
+    console.log(currentSeconds);
+    if (!savedTime || currentSeconds < parseFloat(savedTime)) {
       localStorage.setItem(maxTimeKey, currentSeconds.toString());
       setMaxTime(currentSeconds);
     }

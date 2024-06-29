@@ -191,8 +191,16 @@ export default function Board({ props, state }: BoardProps) {
     setBoard(array);
   };
 
+  const discoverNeighborhoodWithPosition = (position: number) => {
+    console.log(position);
+    console.log();
+  };
+
   const handleClickCube = (position: number, e: any) => {
-    if (discovered.has(position)) return;
+    if (discovered.has(position)) {
+      discoverNeighborhoodWithPosition(position);
+      return;
+    }
 
     if (isMobile) {
       const { clientX: x, clientY: y } = e;
@@ -210,6 +218,26 @@ export default function Board({ props, state }: BoardProps) {
   const handleClickMobile = (position: number) => {
     handleAddPosition(position);
     updateBoard(position);
+  };
+
+  const discoverNeighborhood = (position: number) => {
+    console.log(position);
+    const neighborhood = bfs(adyacenceMatrix, position, cols, rows);
+    console.log(neighborhood);
+    neighborhood.forEach((neigh: number) => {
+      handleAddPosition(neigh);
+      let bombs = adyacenceMatrix.get(neigh)?.length;
+      let element = document.getElementById(neigh.toString());
+      if (element && bombs && bombs >= 0) {
+        element.innerHTML = bombs.toString();
+      }
+    });
+
+    if (discovered.size + positionsBombs.size === cols * rows) {
+      setWonGame(true);
+      setIsGameOver(true);
+      handleStopTimer();
+    }
   };
 
   const updateBoard = (clickPosition: number): void => {
@@ -248,32 +276,9 @@ export default function Board({ props, state }: BoardProps) {
     });
   };
 
-  const discoverNeighborhood = (position: number) => {
-    const neighborhood = bfs(adyacenceMatrix, position, cols, rows);
-    neighborhood.forEach((neigh: number) => {
-      handleAddPosition(neigh);
-      let bombs = adyacenceMatrix.get(neigh)?.length;
-      let element = document.getElementById(neigh.toString());
-      if (element && bombs && bombs >= 0) {
-        element.innerHTML = bombs.toString();
-      }
-    });
-
-    if (discovered.size + positionsBombs.size === cols * rows) {
-      setWonGame(true);
-      setIsGameOver(true);
-      handleStopTimer();
-    }
-  };
-
   return (
     <>
-      <Timer
-        ref={timerRef}
-        level={level}
-        onStart={() => console.log("Timer started")}
-        onStop={() => console.log("Timer stopped")}
-      />
+      <Timer ref={timerRef} level={level} />
       <section
         className={`${styles.board} ${isGameOver ? styles.disabled : ""}`}
       >

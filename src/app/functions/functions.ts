@@ -132,17 +132,6 @@ export function bfs(
   const visited = new Set<number>();
   const discovered: number[] = [];
 
-  const directions = [
-    [-1, 0], // Arriba
-    [-1, -1], // Arriba izquierda
-    [-1, 1], // Arriba derecha
-    [1, 0], // Abajo
-    [1, -1], // Abajo izquierda
-    [1, 1], // Abajo derecha
-    [0, -1], // Izquierda
-    [0, 1], // Derecha
-  ];
-
   while (queue.length > 0) {
     currentPosition = queue.shift();
 
@@ -162,18 +151,59 @@ export function bfs(
     const i = Math.floor((currentPosition - 1) / cols);
     const j = (currentPosition - 1) % cols;
 
-    for (const [di, dj] of directions) {
-      const ni = i + di;
-      const nj = j + dj;
-      const neighborPos = ni * cols + nj + 1;
-
-      if (
-        ni >= 0 &&
-        ni < rows &&
-        nj >= 0 &&
-        nj < cols &&
-        !visited.has(neighborPos)
-      ) {
+    // Arriba
+    if (i > 0) {
+      const neighborPos = (i - 1) * cols + j + 1;
+      if (!visited.has(neighborPos)) {
+        queue.push(neighborPos);
+      }
+    }
+    // Arriba izquierda
+    if (i > 0 && j > 0) {
+      const neighborPos = (i - 1) * cols + (j - 1) + 1;
+      if (!visited.has(neighborPos)) {
+        queue.push(neighborPos);
+      }
+    }
+    // Arriba derecha
+    if (i > 0 && j < cols - 1) {
+      const neighborPos = (i - 1) * cols + (j + 1) + 1;
+      if (!visited.has(neighborPos)) {
+        queue.push(neighborPos);
+      }
+    }
+    // Abajo
+    if (i < rows - 1) {
+      const neighborPos = (i + 1) * cols + j + 1;
+      if (!visited.has(neighborPos)) {
+        queue.push(neighborPos);
+      }
+    }
+    // Abajo izquierda
+    if (i < rows - 1 && j > 0) {
+      const neighborPos = (i + 1) * cols + (j - 1) + 1;
+      if (!visited.has(neighborPos)) {
+        queue.push(neighborPos);
+      }
+    }
+    // Abajo derecha
+    if (i < rows - 1 && j < cols - 1) {
+      const neighborPos = (i + 1) * cols + (j + 1) + 1;
+      if (!visited.has(neighborPos)) {
+        queue.push(neighborPos);
+      }
+    }
+    // Izquierda
+    if (j > 0) {
+      const neighborPos = i * cols + (j - 1) + 1;
+      if (!visited.has(neighborPos)) {
+        queue.push(neighborPos);
+      }
+    }
+    // Derecha
+    if (j < cols - 1) {
+      const neighborPos = i * cols + (j + 1) + 1;
+      if (!visited.has(neighborPos)) {
         queue.push(neighborPos);
       }
     }
