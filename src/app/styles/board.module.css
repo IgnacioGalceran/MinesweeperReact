@@ -68,6 +68,7 @@
   color: rgb(47, 25, 68);
 }
 
+.cube:hover,
 .cube0:hover,
 .cube1:hover,
 .cube2:hover,
@@ -77,7 +78,7 @@
 .cube6:hover,
 .cube7:hover,
 .cube8:hover {
-  background-color: rgb(177, 177, 177);
+  background-color: rgb(155, 155, 155);
 }
 
 .remaining {

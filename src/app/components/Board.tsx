@@ -80,7 +80,7 @@ export default function Board({ props, state }: BoardProps) {
   }, [initialPosition]);
 
   useEffect(() => {
-    const drawBoard = (): JSX.Element[][] => {
+    const drawBoard = (): void => {
       let array: JSX.Element[][] = Array.from({ length: rows }, (_, i) =>
         Array.from({ length: cols }, (_, j) => {
           const key = j + cols * i + 1;
@@ -91,13 +91,13 @@ export default function Board({ props, state }: BoardProps) {
               key={key.toString()}
               onContextMenu={(e) => handleRightClick(key, e)}
               onClick={(e) => handleClickCube(key, e)}
-              className={`${
+              className={
                 discovered.has(key)
                   ? `${styles.discovered} ${
                       styles["cube" + bombNumber[i][j].toString()]
                     }`
-                  : styles["cube" + bombNumber[i][j].toString()]
-              } ${bombNumber[i][j].toString()}`}
+                  : styles.cube
+              }
             >
               {discovered.has(key) &&
                 bombNumber[i][j] > 0 &&
@@ -107,11 +107,11 @@ export default function Board({ props, state }: BoardProps) {
         })
       );
 
-      return array;
+      return setBoard(array);
     };
 
     if (isPlaying) {
-      setBoard(drawBoard());
+      drawBoard();
     } else {
       clearStates();
     }
@@ -141,7 +141,14 @@ export default function Board({ props, state }: BoardProps) {
     setDiscovered(discovered.add(initialPosition));
     let element = document.getElementById(initialPosition.toString());
     if (element) {
-      element.classList.add(styles.discovered);
+      let bombs = adyacenceMatrix.get(initialPosition)?.length;
+      if (bombs !== undefined && bombs > 0) {
+        element.innerHTML = bombs.toString();
+      }
+      element.classList.add(
+        styles[`cube${adyacenceMatrix.get(initialPosition)?.length}`]
+      );
+      element.classList.add(`${styles.discovered}`);
     }
   };
 
@@ -181,6 +188,14 @@ export default function Board({ props, state }: BoardProps) {
     let array = Array.from({ length: rows }, (_, i) =>
       Array.from({ length: cols }, (_, j) => {
         const key = j + cols * i + 1;
+        let element = document.getElementById(key.toString());
+        element?.classList.remove(`${styles.bomb}`);
+        element?.classList.remove(`${styles.marked}`);
+        element?.classList.remove(`${styles.discovered}`);
+        for (let i = 0; i < 8; i++) {
+          element?.classList.remove(styles[`cube${i}`]);
+        }
+
         return (
           <div
             id={key.toString()}
@@ -191,7 +206,7 @@ export default function Board({ props, state }: BoardProps) {
               setIsPlaying(true);
               handleStartTimer();
             }}
-            className={styles["cube"]}
+            className={styles.cube}
           >
             {" "}
           </div>
@@ -218,11 +233,6 @@ export default function Board({ props, state }: BoardProps) {
     if (typeof neighborhood !== "boolean") {
       neighborhood.forEach((neigh: number) => {
         handleAddPosition(neigh);
-        let bombs = adyacenceMatrix.get(neigh)?.length;
-        let element = document.getElementById(neigh.toString());
-        if (element && bombs && bombs >= 0) {
-          element.innerHTML = bombs.toString();
-        }
       });
     } else {
       if (neighborhood) {
@@ -233,9 +243,9 @@ export default function Board({ props, state }: BoardProps) {
     finishedAndWonGame();
   };
 
-  const handleClickCube = (position: number, e: any) => {
+  const handleClickCube = (position: number, e: any): void => {
     if (flagged.has(position)) {
-      return;
+      return handleRightClick(position, e);
     }
 
     if (discovered.has(position)) {
@@ -265,11 +275,6 @@ export default function Board({ props, state }: BoardProps) {
     const neighborhood = bfs(adyacenceMatrix, position, cols, rows);
     neighborhood.forEach((neigh: number) => {
       handleAddPosition(neigh);
-      let bombs = adyacenceMatrix.get(neigh)?.length;
-      let element = document.getElementById(neigh.toString());
-      if (element && bombs && bombs >= 0) {
-        element.innerHTML = bombs.toString();
-      }
     });
 
     finishedAndWonGame();

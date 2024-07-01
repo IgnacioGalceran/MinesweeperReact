@@ -212,6 +212,44 @@ export function bfs(
   return discovered;
 }
 
+const processNeighbor = (
+  neighborPos: number,
+  adyacenceMatrix: Map<number, number[]>,
+  positionsBombs: Set<number>,
+  discovered: Set<number>,
+  flagged: Set<number>,
+  cols: number,
+  rows: number,
+  newDiscovered: number[],
+  countFlagged: number,
+  gameOver: boolean
+) => {
+  const isNeighborDiscovered = discovered.has(neighborPos);
+  const isNeighborBomb = positionsBombs.has(neighborPos);
+  const isNeighborFlagged = flagged.has(neighborPos);
+  const neighborBombsCount = adyacenceMatrix.get(neighborPos)?.length || 0;
+
+  if (neighborBombsCount === 0 && !isNeighborDiscovered && !isNeighborBomb) {
+    const result = bfs(adyacenceMatrix, neighborPos, cols, rows);
+    if (Array.isArray(result)) {
+      newDiscovered = [...newDiscovered, ...result];
+    }
+  }
+
+  if (!isNeighborDiscovered && !isNeighborBomb) {
+    newDiscovered.push(neighborPos);
+  }
+
+  if (isNeighborFlagged) {
+    countFlagged++;
+    if (!isNeighborBomb) {
+      gameOver = true;
+    }
+  }
+
+  return { newDiscovered, countFlagged, gameOver };
+};
+
 export function bfsWithDiscovered(
   adyacenceMatrix: Map<number, number[]>,
   positionsBombs: Set<number>,
@@ -221,8 +259,7 @@ export function bfsWithDiscovered(
   cols: number,
   rows: number
 ): number[] | boolean {
-  // Verificar si el nodo tiene bombas adyacentes
-  let newDiscovered: any[] = [];
+  let newDiscovered: number[] = [];
   let gameOver: boolean = false;
   const neighbors = adyacenceMatrix.get(initialPosition);
   let countFlagged = 0;
@@ -233,154 +270,154 @@ export function bfsWithDiscovered(
   // Arriba
   if (i > 0) {
     const neighborPos = (i - 1) * cols + j + 1;
-    if (
-      adyacenceMatrix.get(neighborPos)?.length === 0 &&
-      !discovered.has(neighborPos) &&
-      !positionsBombs.has(neighborPos)
-    ) {
-      newDiscovered = bfs(adyacenceMatrix, neighborPos, cols, rows);
-    }
-
-    if (flagged.has(neighborPos)) {
-      countFlagged++;
-    }
-
-    if (flagged.has(neighborPos) && !positionsBombs.has(neighborPos)) {
-      gameOver = true;
-    }
+    const result = processNeighbor(
+      neighborPos,
+      adyacenceMatrix,
+      positionsBombs,
+      discovered,
+      flagged,
+      cols,
+      rows,
+      newDiscovered,
+      countFlagged,
+      gameOver
+    );
+    newDiscovered = result.newDiscovered;
+    countFlagged = result.countFlagged;
+    gameOver = result.gameOver;
   }
   // Arriba izquierda
   if (i > 0 && j > 0) {
     const neighborPos = (i - 1) * cols + (j - 1) + 1;
-    if (
-      adyacenceMatrix.get(neighborPos)?.length === 0 &&
-      !discovered.has(neighborPos) &&
-      !positionsBombs.has(neighborPos)
-    ) {
-      newDiscovered = bfs(adyacenceMatrix, neighborPos, cols, rows);
-    }
-
-    if (flagged.has(neighborPos)) {
-      countFlagged++;
-    }
-
-    if (flagged.has(neighborPos) && !positionsBombs.has(neighborPos)) {
-      gameOver = true;
-    }
+    const result = processNeighbor(
+      neighborPos,
+      adyacenceMatrix,
+      positionsBombs,
+      discovered,
+      flagged,
+      cols,
+      rows,
+      newDiscovered,
+      countFlagged,
+      gameOver
+    );
+    newDiscovered = result.newDiscovered;
+    countFlagged = result.countFlagged;
+    gameOver = result.gameOver;
   }
   // Arriba derecha
   if (i > 0 && j < cols - 1) {
     const neighborPos = (i - 1) * cols + (j + 1) + 1;
-    if (
-      adyacenceMatrix.get(neighborPos)?.length === 0 &&
-      !discovered.has(neighborPos) &&
-      !positionsBombs.has(neighborPos)
-    ) {
-      newDiscovered = bfs(adyacenceMatrix, neighborPos, cols, rows);
-    }
-
-    if (flagged.has(neighborPos)) {
-      countFlagged++;
-    }
-
-    if (flagged.has(neighborPos) && !positionsBombs.has(neighborPos)) {
-      gameOver = true;
-    }
+    const result = processNeighbor(
+      neighborPos,
+      adyacenceMatrix,
+      positionsBombs,
+      discovered,
+      flagged,
+      cols,
+      rows,
+      newDiscovered,
+      countFlagged,
+      gameOver
+    );
+    newDiscovered = result.newDiscovered;
+    countFlagged = result.countFlagged;
+    gameOver = result.gameOver;
   }
   // Abajo
   if (i < rows - 1) {
     const neighborPos = (i + 1) * cols + j + 1;
-    if (
-      adyacenceMatrix.get(neighborPos)?.length === 0 &&
-      !discovered.has(neighborPos) &&
-      !positionsBombs.has(neighborPos)
-    ) {
-      newDiscovered = bfs(adyacenceMatrix, neighborPos, cols, rows);
-    }
-
-    if (flagged.has(neighborPos)) {
-      countFlagged++;
-    }
-
-    if (flagged.has(neighborPos) && !positionsBombs.has(neighborPos)) {
-      gameOver = true;
-    }
+    const result = processNeighbor(
+      neighborPos,
+      adyacenceMatrix,
+      positionsBombs,
+      discovered,
+      flagged,
+      cols,
+      rows,
+      newDiscovered,
+      countFlagged,
+      gameOver
+    );
+    newDiscovered = result.newDiscovered;
+    countFlagged = result.countFlagged;
+    gameOver = result.gameOver;
   }
   // Abajo izquierda
   if (i < rows - 1 && j > 0) {
     const neighborPos = (i + 1) * cols + (j - 1) + 1;
-    if (
-      adyacenceMatrix.get(neighborPos)?.length === 0 &&
-      !discovered.has(neighborPos) &&
-      !positionsBombs.has(neighborPos)
-    ) {
-      newDiscovered = bfs(adyacenceMatrix, neighborPos, cols, rows);
-    }
-
-    if (flagged.has(neighborPos)) {
-      countFlagged++;
-    }
-
-    if (flagged.has(neighborPos) && !positionsBombs.has(neighborPos)) {
-      gameOver = true;
-    }
+    const result = processNeighbor(
+      neighborPos,
+      adyacenceMatrix,
+      positionsBombs,
+      discovered,
+      flagged,
+      cols,
+      rows,
+      newDiscovered,
+      countFlagged,
+      gameOver
+    );
+    newDiscovered = result.newDiscovered;
+    countFlagged = result.countFlagged;
+    gameOver = result.gameOver;
   }
   // Abajo derecha
   if (i < rows - 1 && j < cols - 1) {
     const neighborPos = (i + 1) * cols + (j + 1) + 1;
-    if (
-      adyacenceMatrix.get(neighborPos)?.length === 0 &&
-      !discovered.has(neighborPos) &&
-      !positionsBombs.has(neighborPos)
-    ) {
-      newDiscovered = bfs(adyacenceMatrix, neighborPos, cols, rows);
-    }
-
-    if (flagged.has(neighborPos)) {
-      countFlagged++;
-    }
-
-    if (flagged.has(neighborPos) && !positionsBombs.has(neighborPos)) {
-      gameOver = true;
-    }
+    const result = processNeighbor(
+      neighborPos,
+      adyacenceMatrix,
+      positionsBombs,
+      discovered,
+      flagged,
+      cols,
+      rows,
+      newDiscovered,
+      countFlagged,
+      gameOver
+    );
+    newDiscovered = result.newDiscovered;
+    countFlagged = result.countFlagged;
+    gameOver = result.gameOver;
   }
   // Izquierda
   if (j > 0) {
     const neighborPos = i * cols + (j - 1) + 1;
-    if (
-      adyacenceMatrix.get(neighborPos)?.length === 0 &&
-      !discovered.has(neighborPos) &&
-      !positionsBombs.has(neighborPos)
-    ) {
-      newDiscovered = bfs(adyacenceMatrix, neighborPos, cols, rows);
-    }
-
-    if (flagged.has(neighborPos)) {
-      countFlagged++;
-    }
-
-    if (flagged.has(neighborPos) && !positionsBombs.has(neighborPos)) {
-      gameOver = true;
-    }
+    const result = processNeighbor(
+      neighborPos,
+      adyacenceMatrix,
+      positionsBombs,
+      discovered,
+      flagged,
+      cols,
+      rows,
+      newDiscovered,
+      countFlagged,
+      gameOver
+    );
+    newDiscovered = result.newDiscovered;
+    countFlagged = result.countFlagged;
+    gameOver = result.gameOver;
   }
   // Derecha
   if (j < cols - 1) {
     const neighborPos = i * cols + (j + 1) + 1;
-    if (
-      adyacenceMatrix.get(neighborPos)?.length === 0 &&
-      !discovered.has(neighborPos) &&
-      !positionsBombs.has(neighborPos)
-    ) {
-      newDiscovered = bfs(adyacenceMatrix, neighborPos, cols, rows);
-    }
-
-    if (flagged.has(neighborPos)) {
-      countFlagged++;
-    }
-
-    if (flagged.has(neighborPos) && !positionsBombs.has(neighborPos)) {
-      gameOver = true;
-    }
+    const result = processNeighbor(
+      neighborPos,
+      adyacenceMatrix,
+      positionsBombs,
+      discovered,
+      flagged,
+      cols,
+      rows,
+      newDiscovered,
+      countFlagged,
+      gameOver
+    );
+    newDiscovered = result.newDiscovered;
+    countFlagged = result.countFlagged;
+    gameOver = result.gameOver;
   }
 
   if (gameOver) {
@@ -388,55 +425,6 @@ export function bfsWithDiscovered(
   }
 
   if (neighbors?.length !== countFlagged) return [];
-
-  // Arriba
-  if (i > 0) {
-    const neighborPos = (i - 1) * cols + j + 1;
-    if (!discovered.has(neighborPos) && !positionsBombs.has(neighborPos))
-      newDiscovered.push(neighborPos);
-  }
-  // Arriba izquierda
-  if (i > 0 && j > 0) {
-    const neighborPos = (i - 1) * cols + (j - 1) + 1;
-    if (!discovered.has(neighborPos) && !positionsBombs.has(neighborPos))
-      newDiscovered.push(neighborPos);
-  }
-  // Arriba derecha
-  if (i > 0 && j < cols - 1) {
-    const neighborPos = (i - 1) * cols + (j + 1) + 1;
-    if (!discovered.has(neighborPos) && !positionsBombs.has(neighborPos))
-      newDiscovered.push(neighborPos);
-  }
-  // Abajo
-  if (i < rows - 1) {
-    const neighborPos = (i + 1) * cols + j + 1;
-    if (!discovered.has(neighborPos) && !positionsBombs.has(neighborPos))
-      newDiscovered.push(neighborPos);
-  }
-  // Abajo izquierda
-  if (i < rows - 1 && j > 0) {
-    const neighborPos = (i + 1) * cols + (j - 1) + 1;
-    if (!discovered.has(neighborPos) && !positionsBombs.has(neighborPos))
-      newDiscovered.push(neighborPos);
-  }
-  // Abajo derecha
-  if (i < rows - 1 && j < cols - 1) {
-    const neighborPos = (i + 1) * cols + (j + 1) + 1;
-    if (!discovered.has(neighborPos) && !positionsBombs.has(neighborPos))
-      newDiscovered.push(neighborPos);
-  }
-  // Izquierda
-  if (j > 0) {
-    const neighborPos = i * cols + (j - 1) + 1;
-    if (!discovered.has(neighborPos) && !positionsBombs.has(neighborPos))
-      newDiscovered.push(neighborPos);
-  }
-  // Derecha
-  if (j < cols - 1) {
-    const neighborPos = i * cols + (j + 1) + 1;
-    if (!discovered.has(neighborPos) && !positionsBombs.has(neighborPos))
-      newDiscovered.push(neighborPos);
-  }
 
   return newDiscovered;
 }
