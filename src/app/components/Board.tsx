@@ -19,6 +19,7 @@ export default function Board({ props, state }: BoardProps) {
     level,
   } = state;
   const { cols, rows, bombs } = props;
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [discovered, setDiscovered] = useState<Set<number>>(new Set());
   const [flagged, setFlagged] = useState<Set<number>>(new Set());
   const [board, setBoard] = useState<JSX.Element[][]>([]);
@@ -174,6 +175,8 @@ export default function Board({ props, state }: BoardProps) {
   };
 
   const clearStates = () => {
+    setIsLoading(true);
+    setBoard([]);
     handleResetTimer();
     setDiscovered(new Set());
     setFlagged(new Set());
@@ -189,9 +192,9 @@ export default function Board({ props, state }: BoardProps) {
       Array.from({ length: cols }, (_, j) => {
         const key = j + cols * i + 1;
         let element = document.getElementById(key.toString());
+        element?.classList.remove(`${styles.discovered}`);
         element?.classList.remove(`${styles.bomb}`);
         element?.classList.remove(`${styles.marked}`);
-        element?.classList.remove(`${styles.discovered}`);
         for (let i = 0; i < 8; i++) {
           element?.classList.remove(styles[`cube${i}`]);
         }
@@ -215,6 +218,7 @@ export default function Board({ props, state }: BoardProps) {
     );
 
     setBoard(array);
+    setIsLoading(false);
   };
 
   const discoverNeighborhoodWithPosition = (position: number) => {
@@ -333,7 +337,7 @@ export default function Board({ props, state }: BoardProps) {
       <section
         className={`${styles.board} ${isGameOver ? styles.disabled : ""}`}
       >
-        {board?.length ? (
+        {board?.length && !isLoading ? (
           board?.map((row: any, index: number) => {
             return (
               <div key={index} className={styles.rows}>
